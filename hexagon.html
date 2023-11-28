@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SVG Example</title>
+</head>
+<body>
+
+	<!-- This is where we'll append our SVG element -->
+	<div id="svg-container"></div>
+
+	<!-- Add a button to download the SVG -->
+	<button id="download-btn">Download SVG</button>
+
+	<script>
+		// Create the SVG element and set its attributes
+		var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		svg.setAttribute("width", "600");
+		svg.setAttribute("height", "400");
+
+		// Create an array to store the hexagons
+		var hexagons = [];
+
+		// Generate a random pattern of hexagons
+		for (var i = 0; i < 100; i++) {
+			// Generate random coordinates for the center of the hexagon
+			var cx = Math.random() * 500 + 50;
+			var cy = Math.random() * 300 + 50;
+
+			// Generate a random radius for the hexagon
+			var r = Math.random() * 30 + 10;
+
+			// Create the hexagon and set its attributes
+			var hexagon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+			var points = "";
+			for (var j = 0; j < 6; j++) {
+				var x = cx + r * Math.cos(j * 2 * Math.PI / 6);
+				var y = cy + r * Math.sin(j * 2 * Math.PI / 6);
+				points += x + "," + y + " ";
+			}
+			hexagon.setAttribute("points", points);
+			hexagon.setAttribute("fill", "none");
+			hexagon.setAttribute("stroke", "black");
+			hexagon.setAttribute("stroke-width", "2");
+
+			// Add the hexagon to the array and the SVG element
+			hexagons.push(hexagon);
+			svg.appendChild(hexagon);
+		}
+
+		// Add an event listener to the download button
+		var downloadBtn = document.getElementById("download-btn");
+		downloadBtn.addEventListener("click", function() {
+			// Create a blob from the SVG data
+			var svgData = new XMLSerializer().serializeToString(svg);
+			var blob = new Blob([svgData], {type: "image/svg+xml"});
+
+			// Create a download link for the blob and trigger a download
+			var downloadLink = document.createElement("a");
+			downloadLink.href = URL.createObjectURL(blob);
+			downloadLink.download = "my-svg-file.svg";
+			document.body.appendChild(downloadLink);
+			downloadLink.click();
+			document.body.removeChild(downloadLink);
+		});
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SVG Example</title>
+</head>
+<body>
+
+	<!-- This is where we'll append our SVG element -->
+	<div id="svg-container"></div>
+
+	<!-- Add a button to download the SVG -->
+	<button id="download-btn">Download SVG</button>
+
+	<script>
+		// Create the SVG element and set its attributes
+		var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		svg.setAttribute("width", "200");
+		svg.setAttribute("height", "200");
+
+		// Create a circle and set its attributes
+		var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+		circle.setAttribute("cx", "100");
+		circle.setAttribute("cy", "100");
+		circle.setAttribute("r", "50");
+		circle.setAttribute("fill", "red");
+
+		// Append the circle to the SVG element
+		svg.appendChild(circle);
+
+		// Append the SVG element to the container in the HTML document
+		var container = document.getElementById("svg-container");
+		container.appendChild(svg);
+
+		// Add an event listener to the download button
+		var downloadBtn = document.getElementById("download-btn");
+		downloadBtn.addEventListener("click", function() {
+			// Create a blob from the SVG data
+			var svgData = new XMLSerializer().serializeToString(svg);
+			var blob = new Blob([svgData], {type: "image/svg+xml"});
+
+			// Create a download link for the blob and trigger a download
+			var downloadLink = document.createElement("a");
+			downloadLink.href = URL.createObjectURL(blob);
+			downloadLink.download = "my-svg-file.svg";
+			document.body.appendChild(downloadLink);
+			downloadLink.click();
+			document.body.removeChild(downloadLink);
+		});
+	</script>
+
+</body>
+</html>
